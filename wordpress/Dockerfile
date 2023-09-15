@@ -1,4 +1,4 @@
-FROM wordpress:5-fpm-alpine
+FROM wordpress:6.3.1-php8.2-fpm-alpine
 
 
 COPY ./wordpress/config/uploads.ini /usr/local/etc/php/conf.d/uploads.ini

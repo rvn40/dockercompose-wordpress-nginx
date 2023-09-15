@@ -1,0 +1,86 @@
+version: '3.9'
+
+networks:
+  wordpress-net:
+    name: wordpress-net
+    driver: bridge
+
+volumes:
+  wordpress-data:
+    name: wordpress-data
+    external: true
+  mysql-data:
+    name: mysql-data
+    external: true
+
+# default port 3306
+services:
+  database:
+    build:
+      context: .
+      dockerfile: mysql/Dockerfile
+    image: kebonce40/mysql:8.0-debian
+    container_name: wp-database
+    restart: unless-stopped
+    networks:
+      - wordpress-net
+    environment:
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=password123!
+      - MYSQL_ROOT_PASSWORD=rootpassword123!
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command:
+      - '--default-authentication-plugin=mysql_native_password'
+
+  # default port 9000 (FastCGI)
+  wordpress:
+    build:
+      context: .
+      dockerfile: wordpress/Dockerfile
+    image: kebonce40/wordpress:5-fpm-alpine
+    container_name: wp-wordpress
+    restart: unless-stopped
+    networks:
+      - wordpress-net
+    depends_on:
+      - database
+    volumes:
+      - wordpress-data:/var/www/html
+    environment:
+      - WORDPRESS_DB_HOST=database:3306
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=password123!
+
+  # default ports 80, 443 - expose mapping as needed to host
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    image: kebonce40/nginx:alpine3.1
+    container_name: wp-nginx
+    restart: unless-stopped
+    networks:
+      - wordpress-net
+    depends_on:
+      - wordpress
+    ports:
+      - "8080:80"    # http
+      - "8443:443"   # https
+    volumes:
+      - wordpress-data:/var/www/html
+
+# adminer - bring up only as needed - bypasses nginx
+#  adminer:
+#    # default port 8080
+#    image: adminer:4
+#    container_name: wp-adminer
+#    restart: unless-stopped
+#    networks:
+#      - wordpress
+#    depends_on:
+#      - database
+#    ports:
+#      - "9000:8080"

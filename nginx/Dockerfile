@@ -1,4 +1,4 @@
 FROM nginx:alpine3.18
 
-COPY ./default.conf /etc/nginx/conf.d/default.conf
-COPY ./ssl /etc/ssl:ro
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/ssl /etc/ssl:ro

@@ -5,7 +5,6 @@ COPY ./wordpress/config/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
 # Add timezone asia/jakarta
 RUN apk --no-cache --update add tzdata ca-certificates curl && \
-	npm install --legacy-peer-deps && \
 	cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
 	echo "Asia/Jakarta" > /etc/timezone && \
 	apk del tzdata

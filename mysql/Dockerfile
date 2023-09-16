@@ -1,7 +1,6 @@
 FROM mysql:8.0-debian
 
 # Add timezone asia/jakarta
-RUN apt update -y && apt install tzdata ca-certificates curl && \
-	cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
-	echo "Asia/Jakarta" > /etc/timezone && \
+RUN apt update -y && apt install ca-certificates curl && \
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC+7 apt install tzdata && \
 	apt-get clean

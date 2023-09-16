@@ -67,8 +67,8 @@ services:
     depends_on:
       - wordpress
     ports:
-      - "8080:80"    # http
-      - "8443:443"   # https
+      - "80:80"    # http
+      - "443:443"   # https
     volumes:
       - wordpress-data:/var/www/html
 

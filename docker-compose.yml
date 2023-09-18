@@ -73,14 +73,14 @@ services:
       - wordpress-data:/var/www/html
 
 # adminer - bring up only as needed - bypasses nginx
-  adminer:
-    # default port 8080
-    image: adminer:4
-    container_name: wp-adminer
-    restart: unless-stopped
-    networks:
-      - wordpress
-    depends_on:
-      - database
-    ports:
-      - "9000:8080"
+#  adminer:
+#    # default port 8080
+#    image: adminer:4
+#    container_name: wp-adminer
+#    restart: unless-stopped
+#    networks:
+#      - wordpress
+#    depends_on:
+#      - database
+#    ports:
+#      - "9000:8080"

@@ -79,7 +79,7 @@ services:
     container_name: wp-adminer
     restart: unless-stopped
     networks:
-      - wordpress
+      - wordpress-net
     depends_on:
       - database
     ports:
